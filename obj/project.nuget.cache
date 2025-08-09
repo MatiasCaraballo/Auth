@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "NwX8IIWqO0I=",
+  "dgSpecHash": "l1GJ86b42Rw=",
   "success": true,
-  "projectFilePath": "C:\\Users\\matiasc\\desarrollo\\Auth\\Auth.csproj",
+  "projectFilePath": "c:\\Users\\matiasc\\desarrollo\\Auth\\Auth.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\matiasc\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\matiasc\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

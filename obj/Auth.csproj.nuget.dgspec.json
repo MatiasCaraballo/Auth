@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\matiasc\\desarrollo\\Auth\\Auth.csproj": {}
+    "c:\\Users\\matiasc\\desarrollo\\Auth\\Auth.csproj": {}
   },
   "projects": {
-    "C:\\Users\\matiasc\\desarrollo\\Auth\\Auth.csproj": {
+    "c:\\Users\\matiasc\\desarrollo\\Auth\\Auth.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\matiasc\\desarrollo\\Auth\\Auth.csproj",
+        "projectUniqueName": "c:\\Users\\matiasc\\desarrollo\\Auth\\Auth.csproj",
         "projectName": "Auth",
-        "projectPath": "C:\\Users\\matiasc\\desarrollo\\Auth\\Auth.csproj",
+        "projectPath": "c:\\Users\\matiasc\\desarrollo\\Auth\\Auth.csproj",
         "packagesPath": "C:\\Users\\matiasc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\matiasc\\desarrollo\\Auth\\obj\\",
+        "outputPath": "c:\\Users\\matiasc\\desarrollo\\Auth\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

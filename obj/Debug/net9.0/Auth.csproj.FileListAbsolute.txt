@@ -171,3 +171,4 @@ C:\Users\matiasc\desarrollo\Auth\obj\Debug\net9.0\ref\Auth.dll
 C:\Users\matiasc\desarrollo\Auth\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\matiasc\desarrollo\Auth\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\matiasc\desarrollo\Auth\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+c:\Users\matiasc\desarrollo\Auth\obj\Debug\net9.0\Auth.sourcelink.json
