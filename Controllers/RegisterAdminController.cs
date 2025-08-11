@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+/*using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -29,4 +29,4 @@ public async Task<IActionResult> RegisterAdmin([FromBody] RegisterAdminDTO dto)
         });
     }
 }
-}
+}*/

@@ -3,15 +3,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 
+
+
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<IRegisterAdminService, RegisterAdminService>();
+//builder.Services.AddScoped<IRegisterAdminService, RegisterAdminService>();
 
+builder.Services.AddScoped<IRegisterService, RegisterService>();
 
 // Agregar Swagger/OpenAPI
 builder.Services.AddSwaggerGen(options =>
@@ -57,7 +59,14 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication();
-builder.Services.AddAuthorization(); 
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", p => p.RequireRole("Admin"));
+    options.AddPolicy("Client", p => p.RequireRole("Client"));
+    options.AddPolicy("AdminOrClient", p => p.RequireRole("Admin", "Client"));
+});
+
 
 var app = builder.Build();
 
@@ -82,6 +91,13 @@ app.MapIdentityApi<IdentityUser>();
 
 app.MapControllers();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await RoleInitializer.SeedRoles(services);
+}
+
+
 app.MapGet("/weatherforecast", () =>
 {
     var forecast = Enumerable.Range(1, 5).Select(index =>
@@ -95,7 +111,7 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 })
 .WithName("GetWeatherForecast")
-.RequireAuthorization();
+.RequireAuthorization("Admin");
 
 app.MapPost("/logout", async (SignInManager<IdentityUser> signInManager,
     [FromBody] object empty) =>
