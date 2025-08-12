@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,10 +8,12 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddControllers();
 
+//Add Services
 builder.Services.AddScoped<IRegisterUserRoleService, RegisterUserRoleService>();
 
+builder.Services.AddScoped<ILogoutService, LogoutService>();
 
-// Agregar Swagger/OpenAPI
+// Add Swagger/OpenAPI
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -45,16 +46,17 @@ builder.Services.AddSwaggerGen(options =>
 
 });
 
+//Connection to the database
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
+//Add the Endpoints from Microsoft.AspNetCore.Identity
 builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddRoles<IdentityRole>()                    
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
-
 
 //Configuration for users login 
 builder.Services.Configure<IdentityOptions>(options =>
@@ -65,9 +67,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Lockout.MaxFailedAccessAttempts = 5;
 });
 
-
-//builder.Services.AddAuthentication();
-
+//Add Roles in the Authorization policy
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Admin", p => p.RequireRole("Admin"));
@@ -77,9 +77,6 @@ builder.Services.AddAuthorization(options =>
 
 
 var app = builder.Build();
-
-//Protects the Swagger's json 
-//app.MapSwagger().RequireAuthorization();
 
 // Configure Swagger environment
 if (app.Environment.IsDevelopment())
@@ -121,19 +118,6 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithName("GetWeatherForecast")
 .RequireAuthorization("Admin");
-
-app.MapPost("/logout", async (SignInManager<IdentityUser> signInManager,
-    [FromBody] object empty) =>
-{
-    if (empty != null)
-    {
-        await signInManager.SignOutAsync();
-        return Results.Ok();
-    }
-    return Results.Unauthorized();
-})
-.WithOpenApi()
-.RequireAuthorization();
 
 app.Run();
 
