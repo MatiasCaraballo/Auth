@@ -7,13 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 
-
-
 builder.Services.AddControllers();
 
-//builder.Services.AddScoped<IRegisterAdminService, RegisterAdminService>();
+builder.Services.AddScoped<IRegisterUserRoleService, RegisterUserRoleService>();
 
-builder.Services.AddScoped<IRegisterService, RegisterService>();
 
 // Agregar Swagger/OpenAPI
 builder.Services.AddSwaggerGen(options =>
@@ -58,7 +55,18 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddAuthentication();
+
+//Configuration for users login 
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.SignIn.RequireConfirmedEmail = false;
+    options.Lockout.AllowedForNewUsers = true;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+});
+
+
+//builder.Services.AddAuthentication();
 
 builder.Services.AddAuthorization(options =>
 {
@@ -71,8 +79,9 @@ builder.Services.AddAuthorization(options =>
 var app = builder.Build();
 
 //Protects the Swagger's json 
-app.MapSwagger().RequireAuthorization();
-// Configurar el pipeline HTTP
+//app.MapSwagger().RequireAuthorization();
+
+// Configure Swagger environment
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

@@ -1,4 +1,4 @@
-public class RegisterUserDTO
+public class RegisterUserRoleDTO
 {
     public string Username { get; set; }
     public string Email { get; set; }
