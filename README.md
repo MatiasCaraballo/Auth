@@ -3,12 +3,11 @@ It is designed to provide scalable authentication features for a microservices-b
 
 ## 🔐 Features  
 - Endpoints from **Microsoft Identity**. 
-- Logout
-- RegisterUserRole
-
-  New endpoints:
+- New endpoints:
   `/RegisterUserRole`| POST   | Register user and assign role (admin or client)
   `/Logout` | POST   | Closes the current user session
+  `/LoginJWT` | POST   | User login, passing the user ID as a claim
+
 
  # Important! To run the APIRESTful : 
  Open the appsettings.Development.json file and make sure it includes the following sections
