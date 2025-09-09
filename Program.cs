@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
-
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+                                     
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
@@ -11,7 +14,10 @@ builder.Services.AddControllers();
 //Add Services
 builder.Services.AddScoped<IRegisterUserRoleService, RegisterUserRoleService>();
 
+builder.Services.AddScoped<ILoginJWTService, LoginJWTService>();
+
 builder.Services.AddScoped<ILogoutService, LogoutService>();
+
 
 // Add Swagger/OpenAPI
 builder.Services.AddSwaggerGen(options =>
@@ -75,6 +81,46 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("AdminOrClient", p => p.RequireRole("Admin", "Client"));
 });
 
+//Adds the Authentication policy services
+var jwtKey = builder.Configuration["Jwt:Key"];
+if (string.IsNullOrEmpty(jwtKey)) { throw new InvalidOperationException("No JWT:Key was specified in the configuration"); }
+
+var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+if (string.IsNullOrEmpty(jwtIssuer)) { throw new InvalidOperationException("No JWT:issuer was specified in the configuration"); }
+
+var jwtAudience = builder.Configuration["Jwt:Audience"];
+if (string.IsNullOrEmpty(jwtAudience)) { throw new InvalidOperationException("No JWT:audience was specified in the configuration"); }
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+        RoleClaimType = builder.Configuration["Jwt:RoleClaimType"],
+    };
+    options.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = context =>
+        {
+            return Task.CompletedTask;
+        },
+        OnTokenValidated = context =>
+        {
+            return Task.CompletedTask;
+        }
+    };
+});
 
 var app = builder.Build();
 
