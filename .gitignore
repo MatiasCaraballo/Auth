@@ -2,3 +2,4 @@ appsettings.json
 bin/ 
 appsettings.json
 appsettings.Development.json 
+.env
