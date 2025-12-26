@@ -1,12 +1,8 @@
-# Build stage
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-# Copia todo el contenido del contexto (./Auth) al build
 COPY . .
 
-# Ajusta el nombre del proyecto si no es Auth.csproj
-# Si tu .csproj tiene otro nombre, reemplaza Auth.csproj por el correcto
 RUN dotnet restore
 RUN dotnet publish -c Release -o /app/publish
 
